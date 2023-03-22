@@ -132,6 +132,10 @@ contract AuthorsList {
         subscriberMap[msg.sender] = author;
     }
 
+    function getPublicationDetails(address _authorAddress) public view returns (Author){
+        return subscriberMap[_authorAddress];
+    }
+
     modifier isOwner() {
         // msg.sender: predefined variable that represents address of the account that called the current function
         require(msg.sender == masterAddress, "Not the Owner");
