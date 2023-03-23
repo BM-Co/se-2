@@ -37,7 +37,7 @@ contract Author {
      * Function that allows a user to extend their subscription for the particular author
      *
      */
-    function extendSubscription() public payable returns (uint256){
+    function extendAndCreateSubscription() public payable returns (uint256){
         uint256 subscriptionIncreaseLength = 0;
         if(subscriptionPrice > 0) {
             subscriptionIncreaseLength = (msg.value/subscriptionPrice)*86400*30;
@@ -68,8 +68,8 @@ contract Author {
      * Function that allows the owner to publish a new post
      * The function can only be called by the owner of the contract as defined by the isOwner modifier
      */
-    function publishPost(string memory postAddress) isOwner public {
-        posts.push(postAddress);
+    function publishPost(string memory postipfsHash) isOwner public {
+        posts.push(postipfsHash);
     }
 
     /**
@@ -78,6 +78,14 @@ contract Author {
      */
     function changePrice(uint256 _newPrice) isOwner public {
         subscriptionPrice = _newPrice;
+    }
+
+    /**
+     * Function that allows the owner to change monthly price
+     * The function can only be called by the owner of the contract as defined by the isOwner modifier
+     */
+    function getPrice() view public returns (uint256) {
+        return subscriptionPrice;
     }
 
     /**
