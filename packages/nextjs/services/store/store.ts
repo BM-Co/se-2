@@ -1,4 +1,4 @@
-import create from "zustand";
+import create from 'zustand'
 
 /**
  * Zustand Store
@@ -10,11 +10,11 @@ import create from "zustand";
  */
 
 type TAppStore = {
-  ethPrice: number;
-  setEthPrice: (newEthPriceState: number) => void;
-};
+  ethPrice: number
+  setEthPrice: (newEthPriceState: number) => void
+}
 
-export const useAppStore = create<TAppStore>(set => ({
+export const useAppStore = create<TAppStore>((set) => ({
   ethPrice: 0,
   setEthPrice: (newValue: number): void => set(() => ({ ethPrice: newValue })),
-}));
+}))

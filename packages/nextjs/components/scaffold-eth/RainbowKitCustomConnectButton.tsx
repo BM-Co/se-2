@@ -1,81 +1,73 @@
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { ChevronDownIcon } from "@heroicons/react/24/solid";
-import { Balance, BlockieAvatar } from "~~/components/scaffold-eth";
-import { TAutoConnect, useAutoConnect, useNetworkColor } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { ChevronDownIcon } from '@heroicons/react/24/solid'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { FaEthereum } from 'react-icons/fa'
+import { Balance, BlockieAvatar } from '~~/components/scaffold-eth'
+import { TAutoConnect, useAutoConnect, useNetworkColor } from '~~/hooks/scaffold-eth'
+import { getTargetNetwork } from '~~/utils/scaffold-eth'
 
 // todo: move this later scaffold config.  See TAutoConnect for comments on each prop
 const tempAutoConnectConfig: TAutoConnect = {
   enableBurnerWallet: true,
   autoConnect: true,
-};
+}
 
 /**
  * Custom Wagmi Connect Button (watch balance + custom design)
  */
 export const RainbowKitCustomConnectButton = () => {
-  useAutoConnect(tempAutoConnectConfig);
+  useAutoConnect(tempAutoConnectConfig)
 
-  const networkColor = useNetworkColor();
-  const configuredNetwork = getTargetNetwork();
+  const networkColor = useNetworkColor()
+  const configuredNetwork = getTargetNetwork()
 
   return (
     <ConnectButton.Custom>
       {({ account, chain, openAccountModal, openConnectModal, openChainModal, mounted }) => {
-        const connected = mounted && account && chain;
+        const connected = mounted && account && chain
 
         return (
           <>
             {(() => {
               if (!connected) {
                 return (
-                  <button className="btn btn-primary btn-sm" onClick={openConnectModal} type="button">
-                    Connect Wallet
+                  <button className="btn-primary btn space-x-2" onClick={openConnectModal} type="button">
+                    <FaEthereum className="h-5 w-5" />
+                    <span>Connect Wallet</span>
                   </button>
-                );
+                )
               }
 
               if (chain.unsupported || chain.id !== configuredNetwork.id) {
                 return (
-                  <>
+                  <div className="flex items-center space-x-2">
                     <span className="text-xs" style={{ color: networkColor }}>
                       {configuredNetwork.name}
                     </span>
-                    <button className="btn btn-sm btn-error ml-2" onClick={openChainModal} type="button">
+                    <button className="btn-error btn" onClick={openChainModal} type="button">
                       <span>Wrong network</span>
-                      <ChevronDownIcon className="h-6 w-4 ml-2 sm:ml-0" />
+                      <ChevronDownIcon className="h-5 w-5" />
                     </button>
-                  </>
-                );
+                  </div>
+                )
               }
 
               return (
-                <div className="px-2 flex justify-end items-center">
-                  <div className="flex justify-center items-center border-1 rounded-lg">
-                    <div className="flex flex-col items-center">
-                      <Balance address={account.address} className="min-h-0 h-auto" />
-                      <span className="text-xs" style={{ color: networkColor }}>
-                        {chain.name}
-                      </span>
-                    </div>
-                    <button
-                      onClick={openAccountModal}
-                      type="button"
-                      className="btn btn-secondary btn-sm pl-0 pr-2 shadow-md"
-                    >
-                      <BlockieAvatar address={account.address} size={24} ensImage={account.ensAvatar} />
-                      <span className="ml-2 mr-1">{account.displayName}</span>
-                      <span>
-                        <ChevronDownIcon className="h-6 w-4" />
-                      </span>
-                    </button>
-                  </div>
+                <div className="flex items-center justify-end space-x-2">
+                  <Balance address={account.address} className="h-auto min-h-0" />
+                  <span className="text-xs font-medium" style={{ color: networkColor }}>
+                    {chain.name}
+                  </span>
+                  <button onClick={openAccountModal} type="button" className="btn space-x-2">
+                    <BlockieAvatar address={account.address} size={20} ensImage={account.ensAvatar} />
+                    <span className="text-sm">{account.displayName}</span>
+                    <ChevronDownIcon className="h-5 w-5" />
+                  </button>
                 </div>
-              );
+              )
             })()}
           </>
-        );
+        )
       }}
     </ConnectButton.Custom>
-  );
-};
+  )
+}

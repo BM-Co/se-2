@@ -1,59 +1,57 @@
-import Head from "next/head";
-import Link from "next/link";
-import type { NextPage } from "next";
-import { BugAntIcon, SparklesIcon } from "@heroicons/react/24/outline";
+import { range } from 'lodash'
+import Link from 'next/link'
+import { useMemo } from 'react'
+import { HiOutlineDocumentText, HiOutlineUserPlus } from 'react-icons/hi2'
+import ErrorMessage from '~~/components/ErrorMessage'
+import { useScaffoldContractRead } from '~~/hooks/scaffold-eth'
 
-const Home: NextPage = () => {
-  return (
-    <>
-      <Head>
-        <title>Scaffold-eth App</title>
-        <meta name="description" content="Created with 🏗 scaffold-eth" />
-      </Head>
+export default function Home() {
+  const { data, isLoading, isError } = useScaffoldContractRead({
+    contractName: 'AuthorsList',
+    functionName: 'getAllAuthors',
+  })
 
-      <div className="flex items-center flex-col flex-grow pt-10">
-        <div className="px-5">
-          <h1 className="text-center mb-8">
-            <span className="block text-2xl mb-2">Welcome to</span>
-            <span className="block text-4xl font-bold">scaffold-eth 2</span>
-          </h1>
-          <p className="text-center text-lg">
-            Get started by editing{" "}
-            <code className="italic bg-base-300 text-base font-bold">packages/nextjs/pages/index.tsx</code>
-          </p>
-          <p className="text-center text-lg">
-            Edit your smart contract <code className="italic bg-base-300 text-base font-bold">YourContract.sol</code> in{" "}
-            <code className="italic bg-base-300 text-base font-bold">packages/hardhat/contracts</code>
-          </p>
+  const content = useMemo(() => {
+    if (isLoading) {
+      return (
+        <div className="space-y-4">
+          {range(10).map((item) => (
+            <div className="skeleton h-6 rounded-md" key={item} />
+          ))}
         </div>
+      )
+    }
 
-        <div className="flex-grow bg-base-300 w-full mt-16 px-8 py-12">
-          <div className="flex justify-center items-center gap-12 flex-col sm:flex-row">
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <BugAntIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Tinker with your smart contract using the{" "}
-                <Link href="/debug" passHref className="link">
-                  Debug Contract
-                </Link>{" "}
-                tab.
-              </p>
-            </div>
-            <div className="flex flex-col bg-base-100 px-10 py-10 text-center items-center max-w-xs rounded-3xl">
-              <SparklesIcon className="h-8 w-8 fill-secondary" />
-              <p>
-                Experiment with{" "}
-                <Link href="/example-ui" passHref className="link">
-                  Example UI
-                </Link>{" "}
-                to build your own UI.
-              </p>
-            </div>
+    if (isError) {
+      return <ErrorMessage />
+    }
+
+    if (data) {
+      if (data.length === 0) {
+        return (
+          <div className="flex flex-col items-center justify-center space-y-4 rounded border p-4">
+            <HiOutlineDocumentText className="h-12 w-12" />
+            <div>No Authors Created Yet</div>
           </div>
-        </div>
-      </div>
-    </>
-  );
-};
+        )
+      }
+    }
 
-export default Home;
+    return null
+  }, [isLoading, isError, data])
+
+  return (
+    <div className="p-4">
+      <div className="mx-auto max-w-screen-lg space-y-6">
+        <div className="flex items-center space-x-4">
+          <div className="flex-1 text-3xl font-medium">All Authors</div>
+          <Link href="/new-author" className="btn-outline-primary btn space-x-2">
+            <HiOutlineUserPlus className="h-5 w-5" />
+            <span>Become a Author</span>
+          </Link>
+        </div>
+        {content}
+      </div>
+    </div>
+  )
+}

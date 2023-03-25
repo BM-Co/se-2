@@ -1,9 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-
 contract Author {
-
     // State Variables
     address public authorAddress;
     string public authorName;
@@ -29,7 +27,7 @@ contract Author {
     // Check the withdraw() function
     modifier isOwner() {
         // msg.sender: predefined variable that represents address of the account that called the current function
-        require(msg.sender == authorAddress, "Not the Owner");
+        require(msg.sender == authorAddress, 'Not the Owner');
         _;
     }
 
@@ -37,15 +35,15 @@ contract Author {
      * Function that allows a user to extend their subscription for the particular author
      *
      */
-    function extendAndCreateSubscription() public payable returns (uint256){
+    function extendAndCreateSubscription() public payable returns (uint256) {
         uint256 subscriptionIncreaseLength = 0;
-        if(subscriptionPrice > 0) {
-            subscriptionIncreaseLength = (msg.value/subscriptionPrice)*86400*30;
+        if (subscriptionPrice > 0) {
+            subscriptionIncreaseLength = (msg.value / subscriptionPrice) * 86400 * 30;
         } else {
-            subscriptionIncreaseLength = 90*86400*30;
+            subscriptionIncreaseLength = 90 * 86400 * 30;
         }
 
-        if (subscriberMap[msg.sender] < block.timestamp ) {
+        if (subscriberMap[msg.sender] < block.timestamp) {
             subscriberMap[msg.sender] = block.timestamp + subscriptionIncreaseLength;
         } else {
             subscriberMap[msg.sender] = subscriberMap[msg.sender] + subscriptionIncreaseLength;
@@ -59,16 +57,16 @@ contract Author {
      * Function that allows the owner to withdraw all the Ether in the contract
      * The function can only be called by the owner of the contract as defined by the isOwner modifier
      */
-    function withdraw() isOwner public {
-        (bool success,) = authorAddress.call{value: address(this).balance}("");
-        require(success, "Failed to send Ether");
+    function withdraw() public isOwner {
+        (bool success, ) = authorAddress.call{value: address(this).balance}('');
+        require(success, 'Failed to send Ether');
     }
 
     /**
      * Function that allows the owner to publish a new post
      * The function can only be called by the owner of the contract as defined by the isOwner modifier
      */
-    function publishPost(string memory postipfsHash) isOwner public {
+    function publishPost(string memory postipfsHash) public isOwner {
         posts.push(postipfsHash);
     }
 
@@ -76,7 +74,7 @@ contract Author {
      * Function that allows the owner to change monthly price
      * The function can only be called by the owner of the contract as defined by the isOwner modifier
      */
-    function changePrice(uint256 _newPrice) isOwner public {
+    function changePrice(uint256 _newPrice) public isOwner {
         subscriptionPrice = _newPrice;
     }
 
@@ -84,15 +82,15 @@ contract Author {
      * Function that allows the owner to change monthly price
      * The function can only be called by the owner of the contract as defined by the isOwner modifier
      */
-    function getPrice() view public returns (uint256) {
+    function getPrice() public view returns (uint256) {
         return subscriptionPrice;
     }
 
     /**
      * Function that checks if the user has a valid subscription
      */
-    function checkSubscriber(address _userAddress) view public returns (bool){
-        if(subscriberMap[_userAddress] < block.timestamp) {
+    function checkSubscriber(address _userAddress) public view returns (bool) {
+        if (subscriberMap[_userAddress] < block.timestamp) {
             return false;
         }
         return true;
@@ -101,7 +99,7 @@ contract Author {
     /**
      * Returns expiring time of the user subscription
      */
-    function getSubscriptionLength() view public returns (uint){
+    function getSubscriptionLength() public view returns (uint) {
         return subscriberMap[msg.sender];
     }
 
@@ -109,16 +107,13 @@ contract Author {
         return posts;
     }
 
-
     /**
      * Function that allows the contract to receive ETH
      */
     receive() external payable {}
 }
 
-
 contract AuthorsList {
-
     address public masterAddress;
 
     // Constructor: Called once on contract deployment
@@ -129,24 +124,30 @@ contract AuthorsList {
 
     // State Variables
     mapping(address => Author) public subscriberMap;
+    address[] public authorsAddress;
 
     /**
-    * Function that adds an author to the list of all authors
-    *
-    */
+     * Function that adds an author to the list of all authors
+     *
+     */
 
-    function addAuthor(string memory _authorName, string memory _publicationName, uint256 _subscriptionPrice) public{
+    function addAuthor(string memory _authorName, string memory _publicationName, uint256 _subscriptionPrice) public {
         Author author = new Author(msg.sender, _authorName, _publicationName, _subscriptionPrice);
+        authorsAddress.push(msg.sender);
         subscriberMap[msg.sender] = author;
     }
 
-    function getPublicationDetails(address _authorAddress) public view returns (Author){
+    function getPublicationDetails(address _authorAddress) public view returns (Author) {
         return subscriberMap[_authorAddress];
+    }
+
+    function getAllAuthors() public view returns (address[] memory) {
+        return authorsAddress;
     }
 
     modifier isOwner() {
         // msg.sender: predefined variable that represents address of the account that called the current function
-        require(msg.sender == masterAddress, "Not the Owner");
+        require(msg.sender == masterAddress, 'Not the Owner');
         _;
     }
 }
