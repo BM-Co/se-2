@@ -1,5 +1,5 @@
-import { HardhatRuntimeEnvironment } from "hardhat/types";
-import { DeployFunction } from "hardhat-deploy/types";
+import { HardhatRuntimeEnvironment } from 'hardhat/types'
+import { DeployFunction } from 'hardhat-deploy/types'
 
 /**
  * Deploys a contract named "YourContract" using the deployer account and
@@ -18,10 +18,10 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     with a random private key in the .env file (then used on hardhat.config.ts)
     You can run the `yarn account` command to check your balance in every network.
   */
-  const { deployer } = await hre.getNamedAccounts();
-  const { deploy } = hre.deployments;
+  const { deployer } = await hre.getNamedAccounts()
+  const { deploy } = hre.deployments
 
-  await deploy("AuthorsList", {
+  await deploy('AuthorsList', {
     from: deployer,
     // Contract constructor arguments
     args: [],
@@ -29,14 +29,14 @@ const deployYourContract: DeployFunction = async function (hre: HardhatRuntimeEn
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
     // automatically mining the contract deployment transaction. There is no effect on live networks.
     autoMine: true,
-  });
+  })
 
   // Get the deployed contract
   // const yourContract = await hre.ethers.getContract("YourContract", deployer);
-};
+}
 
-export default deployYourContract;
+export default deployYourContract
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
 // e.g. yarn deploy --tags YourContract
-deployYourContract.tags = ["AuthorsList"];
+deployYourContract.tags = ['AuthorsList']
