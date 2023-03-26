@@ -1,12 +1,16 @@
-export const Spinner = ({ width, height }: { width?: string; height?: string }) => {
+import clsx from 'clsx'
+
+type SpinnerProps = {
+  className?: string
+  style?: React.CSSProperties
+}
+
+export const Spinner = ({ className = 'w-6 h-6', style }: SpinnerProps) => {
   return (
     <svg
       aria-hidden="true"
-      className="mr-2 w-6 h-6 text-gray-200 dark:text-gray-300 animate-spin fill-primary-focus"
-      style={{
-        width,
-        height,
-      }}
+      className={clsx('animate-spin text-current', className)}
+      style={style}
       viewBox="0 0 100 101"
       xmlns="http://www.w3.org/2000/svg"
     >
@@ -19,5 +23,5 @@ export const Spinner = ({ width, height }: { width?: string; height?: string }) 
         fill="currentFill"
       />
     </svg>
-  );
-};
+  )
+}

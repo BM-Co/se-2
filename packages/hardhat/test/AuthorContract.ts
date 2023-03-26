@@ -14,7 +14,7 @@ describe('AuthorsList', function () {
     await authorsList.deployed()
     await authorsList.addAuthor('test author', 'test publication', ethers.utils.parseEther('0.01'))
     const pub_details_address = await authorsList.getPublicationDetails(owner.address)
-    testAuthor = (await ethers.getContractFactory('Author')).attach(pub_details_address)
+    testAuthor = (await ethers.getContractFactory('Author')).attach(pub_details_address) as Author
   })
 
   describe('Deployment', function () {

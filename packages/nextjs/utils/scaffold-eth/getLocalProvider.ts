@@ -1,5 +1,5 @@
-import { Chain } from "wagmi";
-import { publicProvider } from "wagmi/providers/public";
+import { Chain } from 'wagmi'
+import { publicProvider } from 'wagmi/providers/public'
 
 /**
  * @dev Get the localProvider for given chain
@@ -7,9 +7,9 @@ import { publicProvider } from "wagmi/providers/public";
  * @return public provider for passed chain
  */
 export const getLocalProvider = (chain: Chain) => {
-  const chainProviderLoader = publicProvider();
-  const chainProviderData = chainProviderLoader(chain);
-  const provider = chainProviderData?.provider();
+  const chainProviderLoader = publicProvider()
+  const chainProviderData = chainProviderLoader(chain)
+  const provider = chainProviderData?.provider()
 
-  return provider;
-};
+  return provider
+}

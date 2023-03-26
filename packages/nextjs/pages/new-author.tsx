@@ -142,8 +142,6 @@ export default function NewAuthor() {
         </div>
       )
     }
-
-    return null
   }, [isLoading, isError, data, formik, isCreatingAuthor])
 
   return (

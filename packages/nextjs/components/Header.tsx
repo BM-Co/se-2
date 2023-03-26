@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import Link from 'next/link'
 import { useAccount } from 'wagmi'
 import { RainbowKitCustomConnectButton } from '~~/components/scaffold-eth'
 
@@ -17,7 +18,9 @@ export function Header({ className, style = {} }: HeaderProps) {
       className={clsx('flex items-center space-x-4 px-4 py-2', className)}
       style={{ height: HEADER_HEIGHT, ...style }}
     >
-      <img src="/logo.svg" className="h-12 w-12 rounded-md border" />
+      <Link href="/">
+        <img src="/logo.svg" className="h-12 w-12 rounded-md border" />
+      </Link>
       <div className="flex-1" />
       {isConnected ? <RainbowKitCustomConnectButton /> : null}
     </div>

@@ -2,6 +2,7 @@ import { range } from 'lodash'
 import Link from 'next/link'
 import { useMemo } from 'react'
 import { HiOutlineDocumentText, HiOutlineUserPlus } from 'react-icons/hi2'
+import AuthorDetail from '~~/components/AuthorDetail'
 import ErrorMessage from '~~/components/ErrorMessage'
 import { useScaffoldContractRead } from '~~/hooks/scaffold-eth'
 
@@ -35,6 +36,14 @@ export default function Home() {
           </div>
         )
       }
+
+      return (
+        <div className="space-y-4">
+          {data.map((item) => (
+            <AuthorDetail key={item} authorAddress={item} />
+          ))}
+        </div>
+      )
     }
 
     return null
