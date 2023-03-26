@@ -6,11 +6,17 @@ import { useAuthorName, useAuthorPublicationName, useAuthorPublicationSubscripti
 
 type AuthorContractDetailProps = {
   contractAddress: string
+  size?: 'large' | 'default'
   className?: string
   style?: React.CSSProperties
 }
 
-export default function AuthorContractDetail({ contractAddress, className, style }: AuthorContractDetailProps) {
+export default function AuthorContractDetail({
+  contractAddress,
+  size = 'default',
+  className,
+  style,
+}: AuthorContractDetailProps) {
   const authorNameResult = useAuthorName(contractAddress)
   const authorPublicationsResult = useAuthorPublicationName(contractAddress)
   const authorPublicationSubscriptionPriceResult = useAuthorPublicationSubscriptionPrice(contractAddress)
@@ -37,7 +43,7 @@ export default function AuthorContractDetail({ contractAddress, className, style
     if (authorName && publicationName && subscriptionPrice) {
       return (
         <div className="space-y-1">
-          <div className="text-xl font-medium">{publicationName}</div>
+          <div className={clsx('font-medium', size === 'default' ? 'text-xl' : 'text-3xl')}>{publicationName}</div>
           <div className="flex items-center space-x-4 text-sm">
             <span>{authorName}</span>
             <span>|</span>
@@ -51,7 +57,7 @@ export default function AuthorContractDetail({ contractAddress, className, style
     }
 
     return null
-  }, [isLoading, publicationName, authorName, subscriptionPrice])
+  }, [isLoading, publicationName, authorName, subscriptionPrice, size])
 
   return (
     <div className={clsx(className)} style={style}>

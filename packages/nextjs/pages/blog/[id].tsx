@@ -1,5 +1,7 @@
+import dayjs from 'dayjs'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
+import { HiOutlineCalendar } from 'react-icons/hi2'
 import ReactMarkdown from 'react-markdown'
 import ErrorMessage from '~~/components/ErrorMessage'
 import useBlogQuery from '~~/hooks/useBlogQuery'
@@ -33,9 +35,18 @@ export default function Blog() {
 
     if (blogQuery.data) {
       return (
-        <div>
-          <div className="mb-8 text-3xl font-medium">{blogQuery.data.title}</div>
-          <div className="prose prose-sm">
+        <div className="space-y-8">
+          <div className="space-y-2">
+            <div className="text-3xl font-medium">{blogQuery.data.title}</div>
+            {blogQuery.data.timestamp ? (
+              <div className="flex items-center space-x-2 text-sm text-content2">
+                <HiOutlineCalendar className="h-5 w-5" />
+                <div>Published on - {dayjs(blogQuery.data.timestamp).format('DD MMM YYYY')}</div>
+              </div>
+            ) : null}
+          </div>
+          <div className="border-b" />
+          <div className="prose">
             <ReactMarkdown>{blogQuery.data.content}</ReactMarkdown>
           </div>
         </div>

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useAccount } from 'wagmi'
 import WriteButton from './WriteButton'
 import { RainbowKitCustomConnectButton } from '~~/components/scaffold-eth'
+import MyBlogs from './MyBlogs'
 
 const HEADER_HEIGHT = 64
 
@@ -26,6 +27,7 @@ export function Header({ className, style = {} }: HeaderProps) {
       <div className="flex-1" />
       {isConnected ? (
         <>
+          <MyBlogs />
           <WriteButton />
           <RainbowKitCustomConnectButton />
         </>
