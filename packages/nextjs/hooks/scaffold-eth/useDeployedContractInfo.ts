@@ -1,7 +1,7 @@
-import { Contract, ContractCodeStatus, ContractName } from './contract.types'
 import { useEffect, useState } from 'react'
 import { useIsMounted } from 'usehooks-ts'
 import { useProvider } from 'wagmi'
+import { Contract, ContractCodeStatus, ContractName } from './contract.types'
 import contracts from '~~/generated/hardhat_contracts'
 import scaffoldConfig from '~~/scaffold.config'
 

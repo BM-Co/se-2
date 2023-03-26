@@ -1,6 +1,6 @@
-import { AbiFunctionReturnType, ContractAbi, ContractName, UseScaffoldReadConfig } from './contract.types'
 import type { ExtractAbiFunctionNames } from 'abitype'
 import { useContractRead } from 'wagmi'
+import { AbiFunctionReturnType, ContractAbi, ContractName, UseScaffoldReadConfig } from './contract.types'
 import { useDeployedContractInfo } from '~~/hooks/scaffold-eth'
 import { getTargetNetwork } from '~~/utils/scaffold-eth'
 
