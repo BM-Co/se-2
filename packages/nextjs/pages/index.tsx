@@ -1,9 +1,9 @@
 import { range } from 'lodash'
-import Link from 'next/link'
 import { useMemo } from 'react'
-import { HiOutlineDocumentText, HiOutlineUserPlus } from 'react-icons/hi2'
+import { HiOutlineDocumentText } from 'react-icons/hi2'
 import AuthorDetail from '~~/components/AuthorDetail'
 import ErrorMessage from '~~/components/ErrorMessage'
+import WriteButton from '~~/components/WriteButton'
 import { useScaffoldContractRead } from '~~/hooks/scaffold-eth'
 
 export default function Home() {
@@ -30,9 +30,10 @@ export default function Home() {
     if (data) {
       if (data.length === 0) {
         return (
-          <div className="flex flex-col items-center justify-center space-y-4 rounded border p-4">
-            <HiOutlineDocumentText className="h-12 w-12" />
-            <div>No Authors Created Yet</div>
+          <div className="flex flex-col items-center justify-center rounded border p-8">
+            <HiOutlineDocumentText className="mb-6 h-12 w-12" />
+            <div className="mb-2">No authors found yet</div>
+            <WriteButton />
           </div>
         )
       }
@@ -54,10 +55,6 @@ export default function Home() {
       <div className="mx-auto max-w-screen-lg space-y-6">
         <div className="flex items-center space-x-4">
           <div className="flex-1 text-3xl font-medium">All Authors</div>
-          <Link href="/new-author" className="btn-outline-primary btn space-x-2">
-            <HiOutlineUserPlus className="h-5 w-5" />
-            <span>Become a Author</span>
-          </Link>
         </div>
         {content}
       </div>

@@ -1,6 +1,8 @@
 import clsx from 'clsx'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useAccount } from 'wagmi'
+import WriteButton from './WriteButton'
 import { RainbowKitCustomConnectButton } from '~~/components/scaffold-eth'
 
 const HEADER_HEIGHT = 64
@@ -19,10 +21,15 @@ export function Header({ className, style = {} }: HeaderProps) {
       style={{ height: HEADER_HEIGHT, ...style }}
     >
       <Link href="/">
-        <img src="/logo.svg" className="h-12 w-12 rounded-md border" />
+        <Image src="/logo.svg" className="rounded-md border" alt="logo" width={48} height={48} />
       </Link>
       <div className="flex-1" />
-      {isConnected ? <RainbowKitCustomConnectButton /> : null}
+      {isConnected ? (
+        <>
+          <WriteButton />
+          <RainbowKitCustomConnectButton />
+        </>
+      ) : null}
     </div>
   )
 }

@@ -1,19 +1,10 @@
-import clsx from 'clsx'
-import { BigNumber } from 'ethers'
-import { useFormik } from 'formik'
 import Link from 'next/link'
 import { useMemo } from 'react'
 import { HiOutlinePlus } from 'react-icons/hi2'
 import { useAccount } from 'wagmi'
-import * as yup from 'yup'
 import ErrorMessage from '~~/components/ErrorMessage'
-import { useScaffoldContractRead, useScaffoldContractWrite } from '~~/hooks/scaffold-eth'
-
-const validationSchema = yup.object({
-  name: yup.string().required('Author Name is required'),
-  publicationName: yup.string().required('Publication Name is required'),
-  subscriptionPrice: yup.number().min(0).required('Please enter a valid subscription price'),
-})
+import NewAuthorForm from '~~/components/NewAuthorForm'
+import { useScaffoldContractRead } from '~~/hooks/scaffold-eth'
 
 export default function NewAuthor() {
   const { address } = useAccount()
@@ -22,32 +13,6 @@ export default function NewAuthor() {
     contractName: 'AuthorsList',
     functionName: 'getPublicationDetails',
     args: [address],
-  })
-
-  const formik = useFormik({
-    validationSchema,
-    initialValues: {
-      name: '',
-      publicationName: '',
-      subscriptionPrice: 0,
-    },
-    onSubmit: () => {
-      writeAsync()
-    },
-  })
-
-  const subscriptionPrice = useMemo(() => {
-    try {
-      return BigNumber.from(formik.values.subscriptionPrice)
-    } catch (error) {
-      return BigNumber.from(0)
-    }
-  }, [formik])
-
-  const { writeAsync, isLoading: isCreatingAuthor } = useScaffoldContractWrite({
-    contractName: 'AuthorsList',
-    functionName: 'addAuthor',
-    args: [formik.values.name, formik.values.publicationName, subscriptionPrice],
   })
 
   const content = useMemo(() => {
@@ -77,57 +42,7 @@ export default function NewAuthor() {
         return (
           <div>
             <div className="mb-4 text-3xl font-medium">Become a author</div>
-            <form onSubmit={formik.handleSubmit} className="space-y-4">
-              <div className="space-y-1">
-                <label className="form-label" htmlFor="name">
-                  Author Name
-                </label>
-                <input
-                  className="input max-w-none"
-                  id="name"
-                  value={formik.values.name}
-                  onChange={formik.handleChange('name')}
-                />
-                {formik.errors.name ? <label className="form-label text-error">{formik.errors.name}</label> : null}
-              </div>
-              <div className="space-y-1">
-                <label className="form-label" htmlFor="publicationName">
-                  Publication Name
-                </label>
-                <input
-                  className="input max-w-none"
-                  id="publicationName"
-                  value={formik.values.publicationName}
-                  onChange={formik.handleChange('publicationName')}
-                />
-                {formik.errors.publicationName ? (
-                  <label className="form-label text-error">{formik.errors.publicationName}</label>
-                ) : null}
-              </div>
-              <div className="space-y-1">
-                <label className="form-label" htmlFor="subscriptionPrice">
-                  Subscription Price
-                </label>
-                <input
-                  className="input max-w-none"
-                  type="number"
-                  id="subscriptionPrice"
-                  value={formik.values.subscriptionPrice}
-                  onChange={formik.handleChange('subscriptionPrice')}
-                />
-                {formik.errors.subscriptionPrice ? (
-                  <label className="form-label text-error">{formik.errors.subscriptionPrice}</label>
-                ) : null}
-              </div>
-              <div className="flex items-center justify-end space-x-4">
-                <button className="btn" type="reset">
-                  Cancel
-                </button>
-                <button className={clsx('btn-primary btn', isCreatingAuthor ? 'btn-loading' : undefined)} type="submit">
-                  Submit
-                </button>
-              </div>
-            </form>
+            <NewAuthorForm />
           </div>
         )
       }
@@ -142,7 +57,7 @@ export default function NewAuthor() {
         </div>
       )
     }
-  }, [isLoading, isError, data, formik, isCreatingAuthor])
+  }, [isLoading, isError, data])
 
   return (
     <div className="p-4">

@@ -38,8 +38,8 @@ export default function AuthorDetail({ authorAddress, className, style }: Author
     if (isLoading) {
       return (
         <div className="space-y-2">
-          <div className="skeleton h-10 w-7/12 rounded-md"></div>
-          <div className="skeleton h-6 rounded-md"></div>
+          <div className="skeleton h-10 w-7/12 rounded-md" />
+          <div className="skeleton h-6 rounded-md" />
         </div>
       )
     }

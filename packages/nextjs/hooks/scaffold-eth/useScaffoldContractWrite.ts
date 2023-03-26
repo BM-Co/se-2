@@ -1,8 +1,8 @@
-import { ContractAbi, ContractName, UseScaffoldWriteConfig } from './contract.types'
 import { Abi, ExtractAbiFunctionNames } from 'abitype'
 import { utils } from 'ethers'
 import { useState } from 'react'
 import { useContractWrite, useNetwork } from 'wagmi'
+import { ContractAbi, ContractName, UseScaffoldWriteConfig } from './contract.types'
 import { getParsedEthersError } from '~~/components/scaffold-eth'
 import { useDeployedContractInfo, useTransactor } from '~~/hooks/scaffold-eth'
 import { getTargetNetwork, notification } from '~~/utils/scaffold-eth'
@@ -44,7 +44,7 @@ export const useScaffoldContractWrite = <
     ...writeConfig,
   })
 
-  const sendContractWriteTx = async () => {
+  const sendContractWriteTx = async (config?: Parameters<typeof wagmiContractWrite.writeAsync>[0]) => {
     if (!deployedContractData) {
       notification.error('Target Contract is not deployed, did you forgot to run `yarn deploy`?')
       return
@@ -61,7 +61,7 @@ export const useScaffoldContractWrite = <
     if (wagmiContractWrite.writeAsync) {
       try {
         setIsMining(true)
-        await writeTx(wagmiContractWrite.writeAsync())
+        await writeTx(wagmiContractWrite.writeAsync(config))
       } catch (e: any) {
         const message = getParsedEthersError(e)
         notification.error(message)
@@ -70,7 +70,6 @@ export const useScaffoldContractWrite = <
       }
     } else {
       notification.error('Contract writer error. Try again.')
-      return
     }
   }
 

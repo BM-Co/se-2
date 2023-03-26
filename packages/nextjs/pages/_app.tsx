@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app'
 import NextNProgress from 'nextjs-progressbar'
 import { useEffect } from 'react'
 import { Toaster } from 'react-hot-toast'
+import { QueryClientProvider } from 'react-query'
 import { WagmiConfig } from 'wagmi'
 import AccountProtection from '~~/components/AccountProtection'
 import { Header } from '~~/components/Header'
@@ -13,6 +14,7 @@ import { useAppStore } from '~~/services/store/store'
 import { wagmiClient } from '~~/services/web3/wagmiClient'
 import { appChains } from '~~/services/web3/wagmiConnectors'
 import '~~/styles/globals.css'
+import { queryClient } from '~~/utils/client'
 
 const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   const price = useEthPrice()
@@ -25,25 +27,27 @@ const ScaffoldEthApp = ({ Component, pageProps }: AppProps) => {
   }, [setEthPrice, price])
 
   return (
-    <WagmiConfig client={wagmiClient}>
-      <NextNProgress />
-      <RainbowKitProvider chains={appChains.chains} avatar={BlockieAvatar}>
-        <AccountProtection>
-          <>
-            <Header className="fixed top-0 left-0 right-0" />
-            <div style={{ paddingTop: Header.HEIGHT }}>
-              <Component {...pageProps} />
-            </div>
-          </>
-        </AccountProtection>
-        <Toaster
-          toastOptions={{
-            duration: 100000,
-            className: 'flex items-center',
-          }}
-        />
-      </RainbowKitProvider>
-    </WagmiConfig>
+    <QueryClientProvider client={queryClient}>
+      <WagmiConfig client={wagmiClient}>
+        <NextNProgress />
+        <RainbowKitProvider chains={appChains.chains} avatar={BlockieAvatar}>
+          <AccountProtection>
+            <>
+              <Header className="fixed top-0 left-0 right-0" />
+              <div style={{ paddingTop: Header.HEIGHT }}>
+                <Component {...pageProps} />
+              </div>
+            </>
+          </AccountProtection>
+          <Toaster
+            toastOptions={{
+              duration: 100000,
+              className: 'flex items-center',
+            }}
+          />
+        </RainbowKitProvider>
+      </WagmiConfig>
+    </QueryClientProvider>
   )
 }
 
