@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { HiOutlinePlus, HiOutlineUserPlus } from 'react-icons/hi2'
 import { useAccount } from 'wagmi'
 import { getParsedEthersError } from './scaffold-eth'
-import { useScaffoldContractRead } from '~~/hooks/scaffold-eth'
+import useAuthorContractQuery from '~~/hooks/useAuthorContract'
 
 type WriteButtonProps = {
   className?: string
@@ -12,25 +12,19 @@ type WriteButtonProps = {
 
 export default function WriteButton({ className, style }: WriteButtonProps) {
   const { address } = useAccount()
-
-  const { data, isLoading, isError, error } = useScaffoldContractRead({
-    contractName: 'AuthorsList',
-    functionName: 'getPublicationDetails',
-    args: [address],
-    enabled: !!address,
-  })
+  const authorContractQuery = useAuthorContractQuery(address)
 
   const content = useMemo(() => {
-    if (isLoading) {
+    if (authorContractQuery.isLoading) {
       return <div className="skeleton h-10 w-40 rounded-md" />
     }
 
-    if (isError) {
-      return <div className="text-xs text-error">{getParsedEthersError(error)}</div>
+    if (authorContractQuery.isError) {
+      return <div className="text-xs text-error">{getParsedEthersError(authorContractQuery.isError)}</div>
     }
 
-    if (data) {
-      if (parseInt(data, 16) === 0) {
+    if (authorContractQuery.data) {
+      if (parseInt(authorContractQuery.data, 16) === 0) {
         return (
           <Link href="/new-author" className="btn-outline-primary btn space-x-2">
             <HiOutlineUserPlus className="h-5 w-5" />
@@ -48,7 +42,7 @@ export default function WriteButton({ className, style }: WriteButtonProps) {
     }
 
     return null
-  }, [isLoading, isError, error, data])
+  }, [authorContractQuery])
 
   return (
     <div className={className} style={style}>
