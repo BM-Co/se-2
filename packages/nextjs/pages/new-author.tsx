@@ -50,7 +50,7 @@ export default function NewAuthor() {
       return (
         <div className="flex flex-col items-center justify-center space-y-4 rounded-md border p-4">
           <div>You have already registered as an author</div>
-          <Link href="/write" className="btn-outline-primary btn space-x-2">
+          <Link href="/new-blog" className="btn-outline-primary btn space-x-2">
             <HiOutlinePlus className="h-5 w-5" />
             <span>Write A Blog</span>
           </Link>
