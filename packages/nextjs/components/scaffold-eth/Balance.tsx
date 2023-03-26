@@ -14,9 +14,9 @@ export const Balance = ({ address, className = '' }: TBalanceProps) => {
   if (!address || isLoading || balance === null) {
     return (
       <div className="flex animate-pulse space-x-4">
-        <div className="h-6 w-6 rounded-md bg-slate-300"></div>
+        <div className="h-6 w-6 rounded-md bg-slate-300" />
         <div className="flex items-center space-y-6">
-          <div className="h-2 w-28 rounded bg-slate-300"></div>
+          <div className="h-2 w-28 rounded bg-slate-300" />
         </div>
       </div>
     )
@@ -24,7 +24,7 @@ export const Balance = ({ address, className = '' }: TBalanceProps) => {
 
   if (isError) {
     return (
-      <div className={`flex max-w-fit cursor-pointer flex-col items-center rounded-md border-2 border-gray-400 px-2`}>
+      <div className={'flex max-w-fit cursor-pointer flex-col items-center rounded-md border-2 border-gray-400 px-2'}>
         <div className="text-xs text-warning">Error</div>
       </div>
     )
@@ -39,7 +39,7 @@ export const Balance = ({ address, className = '' }: TBalanceProps) => {
         {isEthBalance ? (
           <>
             <span>{balance?.toFixed(4)}</span>
-            <span className="ml-1 text-xs font-bold">ETH</span>
+            <span className="ml-1 text-xs font-bold">MATIC</span>
           </>
         ) : (
           <>
