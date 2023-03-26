@@ -78,7 +78,7 @@ export default function NewAuthorForm({ className, style }: NewAuthorFormProps) 
       <div className="space-y-1">
         <label className="form-label" htmlFor="subscriptionPrice">
           <span>
-            Subscription Price (in <span className="font-medium text-primary">Ether</span>)
+            Subscription Price (in <span className="font-medium text-primary">Matic</span>)
           </span>
         </label>
         <input

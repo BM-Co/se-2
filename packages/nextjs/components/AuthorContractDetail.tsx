@@ -1,7 +1,6 @@
 import clsx from 'clsx'
 import { ethers } from 'ethers'
 import { useMemo } from 'react'
-import { FaEthereum } from 'react-icons/fa'
 import { useAuthorName, useAuthorPublicationName, useAuthorPublicationSubscriptionPrice } from '~~/hooks/useAuthor'
 
 type AuthorContractDetailProps = {
@@ -48,7 +47,7 @@ export default function AuthorContractDetail({
             <span>{authorName}</span>
             <span>|</span>
             <span className="flex items-center space-x-2">
-              <FaEthereum />
+              <img src={'/polygon-matic-logo.svg'} className="h-5 w-5" />
               <span>{ethers.utils.formatUnits(subscriptionPrice, 'ether')}</span>
             </span>
           </div>
