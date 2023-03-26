@@ -1,12 +1,12 @@
-import { useCallback, useEffect, useState } from "react";
-import { useBalance } from "wagmi";
-import { useAppStore } from "~~/services/store/store";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { useCallback, useEffect, useState } from 'react'
+import { useBalance } from 'wagmi'
+import { useAppStore } from '~~/services/store/store'
+import { getTargetNetwork } from '~~/utils/scaffold-eth'
 
 export function useAccountBalance(address?: string) {
-  const [isEthBalance, setIsEthBalance] = useState(true);
-  const [balance, setBalance] = useState<number | null>(null);
-  const price = useAppStore(state => state.ethPrice);
+  const [isEthBalance, setIsEthBalance] = useState(true)
+  const [balance, setBalance] = useState<number | null>(null)
+  const price = useAppStore((state) => state.ethPrice)
 
   const {
     data: fetchedBalanceData,
@@ -16,17 +16,17 @@ export function useAccountBalance(address?: string) {
     address,
     watch: true,
     chainId: getTargetNetwork().id,
-  });
+  })
 
   const onToggleBalance = useCallback(() => {
-    setIsEthBalance(!isEthBalance);
-  }, [isEthBalance]);
+    setIsEthBalance(!isEthBalance)
+  }, [isEthBalance])
 
   useEffect(() => {
     if (fetchedBalanceData?.formatted) {
-      setBalance(Number(fetchedBalanceData.formatted));
+      setBalance(Number(fetchedBalanceData.formatted))
     }
-  }, [fetchedBalanceData]);
+  }, [fetchedBalanceData])
 
-  return { balance, price, isError, isLoading, onToggleBalance, isEthBalance };
+  return { balance, price, isError, isLoading, onToggleBalance, isEthBalance }
 }

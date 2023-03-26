@@ -1,8 +1,8 @@
-import { AbiFunctionReturnType, ContractAbi, ContractName, UseScaffoldReadConfig } from "./contract.types";
-import type { ExtractAbiFunctionNames } from "abitype";
-import { useContractRead } from "wagmi";
-import { useDeployedContractInfo } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork } from "~~/utils/scaffold-eth";
+import { AbiFunctionReturnType, ContractAbi, ContractName, UseScaffoldReadConfig } from './contract.types'
+import type { ExtractAbiFunctionNames } from 'abitype'
+import { useContractRead } from 'wagmi'
+import { useDeployedContractInfo } from '~~/hooks/scaffold-eth'
+import { getTargetNetwork } from '~~/utils/scaffold-eth'
 
 /**
  * @dev wrapper for wagmi's useContractRead hook which loads in deployed contract contract abi, address automatically
@@ -13,14 +13,14 @@ import { getTargetNetwork } from "~~/utils/scaffold-eth";
  */
 export const useScaffoldContractRead = <
   TContractName extends ContractName,
-  TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "pure" | "view">,
+  TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, 'pure' | 'view'>,
 >({
   contractName,
   functionName,
   args,
   ...readConfig
 }: UseScaffoldReadConfig<TContractName, TFunctionName>) => {
-  const { data: deployedContract } = useDeployedContractInfo(contractName);
+  const { data: deployedContract } = useDeployedContractInfo(contractName)
 
   return useContractRead({
     chainId: getTargetNetwork().id,
@@ -30,11 +30,11 @@ export const useScaffoldContractRead = <
     watch: true,
     args,
     ...(readConfig as any),
-  }) as Omit<ReturnType<typeof useContractRead>, "data" | "refetch"> & {
-    data: AbiFunctionReturnType<ContractAbi, TFunctionName> | undefined;
+  }) as Omit<ReturnType<typeof useContractRead>, 'data' | 'refetch'> & {
+    data: AbiFunctionReturnType<ContractAbi, TFunctionName> | undefined
     refetch: (options?: {
-      throwOnError: boolean;
-      cancelRefetch: boolean;
-    }) => Promise<AbiFunctionReturnType<ContractAbi, TFunctionName>>;
-  };
-};
+      throwOnError: boolean
+      cancelRefetch: boolean
+    }) => Promise<AbiFunctionReturnType<ContractAbi, TFunctionName>>
+  }
+}

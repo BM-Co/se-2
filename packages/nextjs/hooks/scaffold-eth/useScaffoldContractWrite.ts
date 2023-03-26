@@ -1,11 +1,11 @@
-import { useState } from "react";
-import { ContractAbi, ContractName, UseScaffoldWriteConfig } from "./contract.types";
-import { Abi, ExtractAbiFunctionNames } from "abitype";
-import { utils } from "ethers";
-import { useContractWrite, useNetwork } from "wagmi";
-import { getParsedEthersError } from "~~/components/scaffold-eth";
-import { useDeployedContractInfo, useTransactor } from "~~/hooks/scaffold-eth";
-import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
+import { ContractAbi, ContractName, UseScaffoldWriteConfig } from './contract.types'
+import { Abi, ExtractAbiFunctionNames } from 'abitype'
+import { utils } from 'ethers'
+import { useState } from 'react'
+import { useContractWrite, useNetwork } from 'wagmi'
+import { getParsedEthersError } from '~~/components/scaffold-eth'
+import { useDeployedContractInfo, useTransactor } from '~~/hooks/scaffold-eth'
+import { getTargetNetwork, notification } from '~~/utils/scaffold-eth'
 
 /**
  * @dev wrapper for wagmi's useContractWrite hook(with config prepared by usePrepareContractWrite hook) which loads in deployed contract abi and address automatically
@@ -17,7 +17,7 @@ import { getTargetNetwork, notification } from "~~/utils/scaffold-eth";
  */
 export const useScaffoldContractWrite = <
   TContractName extends ContractName,
-  TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, "nonpayable" | "payable">,
+  TFunctionName extends ExtractAbiFunctionNames<ContractAbi<TContractName>, 'nonpayable' | 'payable'>,
 >({
   contractName,
   functionName,
@@ -25,14 +25,14 @@ export const useScaffoldContractWrite = <
   value,
   ...writeConfig
 }: UseScaffoldWriteConfig<TContractName, TFunctionName>) => {
-  const { data: deployedContractData } = useDeployedContractInfo(contractName);
-  const { chain } = useNetwork();
-  const writeTx = useTransactor();
-  const [isMining, setIsMining] = useState(false);
-  const configuredNetwork = getTargetNetwork();
+  const { data: deployedContractData } = useDeployedContractInfo(contractName)
+  const { chain } = useNetwork()
+  const writeTx = useTransactor()
+  const [isMining, setIsMining] = useState(false)
+  const configuredNetwork = getTargetNetwork()
 
   const wagmiContractWrite = useContractWrite({
-    mode: "recklesslyUnprepared",
+    mode: 'recklesslyUnprepared',
     chainId: configuredNetwork.id,
     address: deployedContractData?.address,
     abi: deployedContractData?.abi as Abi,
@@ -42,42 +42,42 @@ export const useScaffoldContractWrite = <
       value: value ? utils.parseEther(value) : undefined,
     },
     ...writeConfig,
-  });
+  })
 
   const sendContractWriteTx = async () => {
     if (!deployedContractData) {
-      notification.error("Target Contract is not deployed, did you forgot to run `yarn deploy`?");
-      return;
+      notification.error('Target Contract is not deployed, did you forgot to run `yarn deploy`?')
+      return
     }
     if (!chain?.id) {
-      notification.error("Please connect your wallet");
-      return;
+      notification.error('Please connect your wallet')
+      return
     }
     if (chain?.id !== configuredNetwork.id) {
-      notification.error("You on the wrong network");
-      return;
+      notification.error('You on the wrong network')
+      return
     }
 
     if (wagmiContractWrite.writeAsync) {
       try {
-        setIsMining(true);
-        await writeTx(wagmiContractWrite.writeAsync());
+        setIsMining(true)
+        await writeTx(wagmiContractWrite.writeAsync())
       } catch (e: any) {
-        const message = getParsedEthersError(e);
-        notification.error(message);
+        const message = getParsedEthersError(e)
+        notification.error(message)
       } finally {
-        setIsMining(false);
+        setIsMining(false)
       }
     } else {
-      notification.error("Contract writer error. Try again.");
-      return;
+      notification.error('Contract writer error. Try again.')
+      return
     }
-  };
+  }
 
   return {
     ...wagmiContractWrite,
     isMining,
     // Overwrite wagmi's write async
     writeAsync: sendContractWriteTx,
-  };
-};
+  }
+}
