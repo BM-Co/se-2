@@ -6,13 +6,10 @@ import { toast } from 'react-hot-toast'
 import { useAccount, useMutation } from 'wagmi'
 import * as yup from 'yup'
 import { useScaffoldContractRead, useScaffoldContractWrite } from '~~/hooks/scaffold-eth'
+import { Blog } from '~~/types/post'
 
 async function createBlog(body: { title: string; content: string }) {
-  const { data } = await axios.post<{
-    IpfsHash: string
-    PinSize: number
-    Timestamp: string
-  }>('/api/blog', body)
+  const { data } = await axios.post<Blog>('/api/blog', body)
   return data
 }
 

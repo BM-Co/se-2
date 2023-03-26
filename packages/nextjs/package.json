@@ -25,6 +25,7 @@
     "class-validator": "^0.14.0",
     "clsx": "^1.2.1",
     "daisyui": "^2.31.0",
+    "dayjs": "^1.11.7",
     "ethers": "^5.0.0",
     "formik": "^2.2.9",
     "lodash": "^4.17.21",

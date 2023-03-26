@@ -1,25 +1,17 @@
-import axios from 'axios'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import ReactMarkdown from 'react-markdown'
-import { useQuery } from 'wagmi'
 import ErrorMessage from '~~/components/ErrorMessage'
-
-async function fetchBlog(blogHash) {
-  const { data } = await axios.get<{ title: string; content: string }>(`/${blogHash}`, {
-    baseURL: '/api/blog',
-  })
-  return data
-}
+import useBlogQuery from '~~/hooks/useBlogQuery'
 
 export default function Blog() {
   const router = useRouter()
   const blogHash = router.query.id as string
 
-  const query = useQuery(['blog', blogHash], () => fetchBlog(blogHash))
+  const blogQuery = useBlogQuery(blogHash)
 
   const content = useMemo(() => {
-    if (query.isLoading) {
+    if (blogQuery.isLoading) {
       return (
         <div>
           <div className="skeleton mb-4 h-10 w-full rounded-md" />
@@ -35,23 +27,23 @@ export default function Blog() {
       )
     }
 
-    if (query.isError) {
+    if (blogQuery.isError) {
       return <ErrorMessage />
     }
 
-    if (query.data) {
+    if (blogQuery.data) {
       return (
         <div>
-          <div className="mb-8 text-3xl font-medium">{query.data.title}</div>
+          <div className="mb-8 text-3xl font-medium">{blogQuery.data.title}</div>
           <div className="prose prose-sm">
-            <ReactMarkdown>{query.data.content}</ReactMarkdown>
+            <ReactMarkdown>{blogQuery.data.content}</ReactMarkdown>
           </div>
         </div>
       )
     }
 
     return null
-  }, [query])
+  }, [blogQuery])
 
   return (
     <div className="p-4">

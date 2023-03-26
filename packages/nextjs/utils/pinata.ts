@@ -5,6 +5,6 @@ export const pinata = new PinataSdk({
   pinataJWTKey: process.env.PINATA_JWT,
 })
 
-export const pinataGateway = axios.create({
-  baseURL: 'https://gateway.pinata.cloud/ipfs',
+export const ipfsGateway = axios.create({
+  baseURL: 'https://ipfs.io/ipfs',
 })

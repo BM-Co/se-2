@@ -1,6 +1,7 @@
 import { IsString } from 'class-validator'
 import { Body, createHandler, Get, Param, Post, ValidationPipe } from 'next-api-decorators'
-import { pinata, pinataGateway } from '~~/utils/pinata'
+import dayjs from 'dayjs'
+import { pinata, ipfsGateway } from '~~/utils/pinata'
 
 class CreateBlogDto {
   @IsString()
@@ -13,7 +14,11 @@ class CreateBlogDto {
 class BlogHandler {
   @Get('/:id')
   async getBlog(@Param('id') id: string) {
-    const { data } = await pinataGateway.get<{ title: string; content: string }>(`/${id}`)
+    const { data } = await ipfsGateway.get<{ title: string; content: string; timestamp?: string }>(`/${id}`, {
+      headers: {
+        Accept: 'application/json',
+      },
+    })
     return data
   }
 
@@ -22,6 +27,7 @@ class BlogHandler {
     const data = await pinata.pinJSONToIPFS({
       title: createBlogDto.title,
       content: createBlogDto.content,
+      timestamp: dayjs().toISOString(),
     })
     return data
   }

@@ -39,9 +39,9 @@ export default function Home() {
       }
 
       return (
-        <div className="space-y-4">
+        <div className="divide-y rounded-md border">
           {data.map((item) => (
-            <AuthorDetail key={item} authorAddress={item} />
+            <AuthorDetail key={item} authorAddress={item} className="p-4" />
           ))}
         </div>
       )

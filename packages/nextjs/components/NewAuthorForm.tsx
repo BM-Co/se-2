@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { BigNumber } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import { useFormik } from 'formik'
 import { useMemo } from 'react'
 import * as yup from 'yup'
@@ -33,7 +33,7 @@ export default function NewAuthorForm({ className, style }: NewAuthorFormProps) 
 
   const subscriptionPrice = useMemo(() => {
     try {
-      return BigNumber.from(formik.values.subscriptionPrice)
+      return ethers.utils.parseEther(formik.values.subscriptionPrice.toString())
     } catch (error) {
       return BigNumber.from(0)
     }
