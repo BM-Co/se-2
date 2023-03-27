@@ -1,4 +1,5 @@
 import clsx from 'clsx'
+import { BigNumber, ethers } from 'ethers'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { useScaffoldContractWrite } from '~~/hooks/scaffold-eth'
@@ -6,11 +7,12 @@ import useSubscriptionStatus from '~~/hooks/useSubscriptionStatus'
 
 type SubscribeButtonProps = {
   contractAddress: string
+  price: BigNumber
   className?: string
   style?: React.CSSProperties
 }
 
-export default function SubscribeButton({ contractAddress, className, style }: SubscribeButtonProps) {
+export default function SubscribeButton({ contractAddress, price, className, style }: SubscribeButtonProps) {
   const router = useRouter()
 
   const subscriptionStatusQuery = useSubscriptionStatus(contractAddress)
@@ -23,6 +25,7 @@ export default function SubscribeButton({ contractAddress, className, style }: S
     onSuccess: () => {
       router.push(`/author/${contractAddress}`)
     },
+    value: ethers.utils.formatEther(price),
   })
 
   const buttonLabel = useMemo(() => {

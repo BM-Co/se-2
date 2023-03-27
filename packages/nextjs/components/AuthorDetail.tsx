@@ -3,6 +3,7 @@ import Link from 'next/link'
 import { useMemo } from 'react'
 import { Address, useAccount } from 'wagmi'
 import { useScaffoldContractRead } from '~~/hooks/scaffold-eth'
+import { useAuthorPublicationSubscriptionPrice } from '~~/hooks/useAuthor'
 import useSubscriptionStatus from '~~/hooks/useSubscriptionStatus'
 import AuthorContractDetail from './AuthorContractDetail'
 import SubscribeButton from './SubscribeButton'
@@ -27,6 +28,7 @@ export default function AuthorDetail({ authorAddress, className, style }: Author
   const isLoading = authorContractResult.isLoading
 
   const subscriptionStatusQuery = useSubscriptionStatus(authorContractAddress)
+  const authorPublicationSubscriptionPriceResult = useAuthorPublicationSubscriptionPrice(authorContractAddress)
 
   const content = useMemo(() => {
     if (isLoading) {
@@ -48,13 +50,27 @@ export default function AuthorDetail({ authorAddress, className, style }: Author
           ) : (
             <AuthorContractDetail className="flex-1" contractAddress={authorContractAddress} />
           )}
-          {address !== authorAddress ? <SubscribeButton contractAddress={authorContractAddress} /> : <WriteButton />}
+          {address !== authorAddress && authorPublicationSubscriptionPriceResult.data ? (
+            <SubscribeButton
+              contractAddress={authorContractAddress}
+              price={authorPublicationSubscriptionPriceResult.data}
+            />
+          ) : (
+            <WriteButton />
+          )}
         </div>
       )
     }
 
     return null
-  }, [isLoading, authorContractAddress, subscriptionStatusQuery, authorAddress, address])
+  }, [
+    isLoading,
+    authorContractAddress,
+    subscriptionStatusQuery,
+    authorAddress,
+    address,
+    authorPublicationSubscriptionPriceResult,
+  ])
 
   return (
     <div className={clsx(className)} style={style}>
